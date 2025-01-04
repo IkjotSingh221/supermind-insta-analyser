@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import "./App.css";
 import Dashboard from "./UI/dashboard/Dashboard";
 import LandingPage from "./UI/LandingPage/LandingPage";
+import ChatPage from "./UI/chat/ChatPage";
 function App() {
   
   return (
@@ -12,8 +13,7 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<LandingPage/>}/>
-          
-          
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
         </div>
         

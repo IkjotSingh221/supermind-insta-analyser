@@ -7,8 +7,11 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function HighlightedCard() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -28,6 +31,7 @@ export default function HighlightedCard() {
           Uncover performance and visitor insights with our data wizardry.
         </Typography>
         <Button
+          onClick={() => navigate('/chat')}
           variant="contained"
           size="small"
           color="primary"
