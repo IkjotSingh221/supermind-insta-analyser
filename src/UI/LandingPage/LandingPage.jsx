@@ -6,17 +6,13 @@ import Features from './components/Features';
 import DataPreview from './components/DataPreview';
 import Footer from './components/Footer';
 function LandingPage() {
-//   const navigate = useNavigate();
 
-//   const handleLogin = () => {
-//     navigate('/dashboard');
-//   };
 
   return (
     <div className="min-h-screen bg-white">
       <Header /*onLogin={handleLogin}*/ />
       <main>
-        <Hero /*onExplore={handleLogin}*/ />
+        <Hero />
         <Features />
         <DataPreview />
       </main>

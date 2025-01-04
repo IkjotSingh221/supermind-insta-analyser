@@ -21,7 +21,7 @@ function Header(/*{ onLogin }*/) {
         </div>
 
         <div className="flex items-center space-x-4">
-          <button 
+          {/* <button 
             // onClick={onLogin}
             className="px-4 py-2 text-blue-600 hover:text-blue-700"
           >
@@ -32,7 +32,7 @@ function Header(/*{ onLogin }*/) {
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Sign Up
-          </button>
+          </button> */}
         </div>
       </nav>
     </header>

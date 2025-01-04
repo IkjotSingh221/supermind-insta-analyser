@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LineChart, PieChart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-function Hero(/*{ onExplore }*/) {
+function Hero() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/dashboard');
+  };
   return (
     <section className="pt-24 pb-12 bg-gradient-to-br from-blue-50 to-white">
       <div className="container mx-auto px-4">
@@ -15,7 +21,7 @@ function Hero(/*{ onExplore }*/) {
               Get real-time insights into post engagement and audience behavior
             </p>
             <button 
-            //   onClick={onExplore}
+              onClick={handleClick}
               className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg"
             >
               Explore Your Dashboard
