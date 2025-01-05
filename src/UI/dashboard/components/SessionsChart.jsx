@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { LineChart } from '@mui/x-charts/LineChart';
 import Box from '@mui/material/Box';
+import data from "../../../data/finalOutput.json";
 
 function AreaGradient({ color, id }) {
   return (
@@ -25,25 +26,40 @@ AreaGradient.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-function getDaysInMonth(month, year) {
-  const date = new Date(year, month, 0);
-  const monthName = date.toLocaleDateString('en-US', {
-    month: 'short',
-  });
-  const daysInMonth = date.getDate();
-  const days = [];
-  let i = 1;
-  while (days.length < daysInMonth) {
-    days.push(`${monthName} ${i}`);
-    i += 1;
-  }
-  return days;
+function getMonthName(dateString) {
+  const month = new Date(dateString).toLocaleString('default', { month: 'short' });
+  const year = new Date(dateString).getFullYear();
+  return `${month} ${year}`;
 }
 
 export default function SessionsChart() {
   const [flipped, setFlipped] = useState(false);
   const theme = useTheme();
-  const data = getDaysInMonth(4, 2024);
+
+  // Grouping data by month and calculating the totals for likes, comments, and shares
+  const groupedData = data.reduce((acc, post) => {
+    const month = getMonthName(post.Date_Posted);
+    if (!acc[month]) {
+      acc[month] = { likes: 0, shares: 0, comments: 0, count: 0 };
+    }
+    acc[month].likes += post.Likes;
+    acc[month].shares += post.Shares;
+    acc[month].comments += post.Comments;
+    acc[month].count += 1;
+    return acc;
+  }, {});
+
+  // Sort months in chronological order
+  const sortedMonths = Object.keys(groupedData).sort((a, b) => {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return dateA - dateB;
+  });
+
+  // Calculate the monthly averages for likes, comments, and shares
+  const avgLikes = sortedMonths.map(month => groupedData[month].likes / groupedData[month].count);
+  const avgComments = sortedMonths.map(month => groupedData[month].comments / groupedData[month].count);
+  const avgShares = sortedMonths.map(month => groupedData[month].shares / groupedData[month].count);
 
   const colorPalette = [
     theme.palette.primary.light,
@@ -88,7 +104,7 @@ export default function SessionsChart() {
         >
           <CardContent>
             <Typography component="h2" variant="subtitle2" gutterBottom>
-              Sessions
+              Monthly Average Likes, Comments, and Shares
             </Typography>
             <Stack sx={{ justifyContent: 'space-between' }}>
               <Stack
@@ -100,12 +116,12 @@ export default function SessionsChart() {
                 }}
               >
                 <Typography variant="h4" component="p">
-                  13,277
+                  {avgLikes.reduce((a, b) => a + b, 0) / avgLikes.length}
                 </Typography>
                 <Chip size="small" color="success" label="+35%" />
               </Stack>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                Sessions per day for the last 30 days
+                Average likes per month
               </Typography>
             </Stack>
             <LineChart
@@ -113,66 +129,54 @@ export default function SessionsChart() {
               xAxis={[
                 {
                   scaleType: 'point',
-                  data,
-                  tickInterval: (index, i) => (i + 1) % 5 === 0,
+                  data: sortedMonths,
+                  tickInterval: 1,
                 },
               ]}
               series={[
                 {
-                  id: 'direct',
-                  label: 'Direct',
+                  id: 'likes',
+                  label: 'Likes',
                   showMark: false,
                   curve: 'linear',
                   stack: 'total',
                   area: true,
                   stackOrder: 'ascending',
-                  data: [
-                    300, 900, 600, 1200, 1500, 1800, 2400, 2100, 2700, 3000, 1800,
-                    3300, 3600, 3900, 4200, 4500, 3900, 4800, 5100, 5400, 4800,
-                    5700, 6000, 6300, 6600, 6900, 7200, 7500, 7800, 8100,
-                  ],
+                  data: avgLikes,
                 },
                 {
-                  id: 'referral',
-                  label: 'Referral',
+                  id: 'comments',
+                  label: 'Comments',
                   showMark: false,
                   curve: 'linear',
                   stack: 'total',
                   area: true,
                   stackOrder: 'ascending',
-                  data: [
-                    500, 900, 700, 1400, 1100, 1700, 2300, 2000, 2600, 2900, 2300,
-                    3200, 3500, 3800, 4100, 4400, 2900, 4700, 5000, 5300, 5600,
-                    5900, 6200, 6500, 5600, 6800, 7100, 7400, 7700, 8000,
-                  ],
+                  data: avgComments,
                 },
                 {
-                  id: 'organic',
-                  label: 'Organic',
+                  id: 'shares',
+                  label: 'Shares',
                   showMark: false,
                   curve: 'linear',
                   stack: 'total',
-                  stackOrder: 'ascending',
-                  data: [
-                    1000, 1500, 1200, 1700, 1300, 2000, 2400, 2200, 2600, 2800,
-                    2500, 3000, 3400, 3700, 3200, 3900, 4100, 3500, 4300, 4500,
-                    4000, 4700, 5000, 5200, 4800, 5400, 5600, 5900, 6100, 6300,
-                  ],
                   area: true,
+                  stackOrder: 'ascending',
+                  data: avgShares,
                 },
               ]}
               height={250}
               margin={{ left: 50, right: 20, top: 20, bottom: 20 }}
               grid={{ horizontal: true }}
               sx={{
-                '& .MuiAreaElement-series-organic': {
-                  fill: "url('#organic')",
+                '& .MuiAreaElement-series-shares': {
+                  fill: "url('#shares')",
                 },
-                '& .MuiAreaElement-series-referral': {
-                  fill: "url('#referral')",
+                '& .MuiAreaElement-series-comments': {
+                  fill: "url('#comments')",
                 },
-                '& .MuiAreaElement-series-direct': {
-                  fill: "url('#direct')",
+                '& .MuiAreaElement-series-likes': {
+                  fill: "url('#likes')",
                 },
               }}
               slotProps={{
@@ -181,9 +185,9 @@ export default function SessionsChart() {
                 },
               }}
             >
-              <AreaGradient color={theme.palette.primary.dark} id="organic" />
-              <AreaGradient color={theme.palette.primary.main} id="referral" />
-              <AreaGradient color={theme.palette.primary.light} id="direct" />
+              <AreaGradient color={theme.palette.primary.light} id="likes" />
+              <AreaGradient color={theme.palette.primary.main} id="comments" />
+              <AreaGradient color={theme.palette.primary.dark} id="shares" />
             </LineChart>
           </CardContent>
         </Card>

@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import data from "../../../data/finalOutput.json";
 
 export default function FlipCardBarChart() {
   const [flipped, setFlipped] = useState(false);
@@ -21,6 +22,52 @@ export default function FlipCardBarChart() {
   const handleFlip = () => {
     setFlipped(!flipped);
   };
+
+  function calculateAverageMetrics(data) {
+    const postTypeStats = {};
+
+    // Loop through each post in the data
+    data.forEach(post => {
+      const { Post_Type, Likes, Shares, Comments } = post;
+
+      // If the post type doesn't exist in the object, initialize it
+      if (!postTypeStats[Post_Type]) {
+        postTypeStats[Post_Type] = {
+          totalLikes: 0,
+          totalShares: 0,
+          totalComments: 0,
+          postCount: 0,
+        };
+      }
+
+      // Accumulate values for each post type
+      postTypeStats[Post_Type].totalLikes += Likes;
+      postTypeStats[Post_Type].totalShares += Shares;
+      postTypeStats[Post_Type].totalComments += Comments;
+      postTypeStats[Post_Type].postCount += 1;
+    });
+
+    // Calculate the averages for each post type
+    const averages = Object.keys(postTypeStats).map(postType => {
+      const { totalLikes, totalShares, totalComments, postCount } = postTypeStats[postType];
+      return {
+        Post_Type: postType,
+        avgLikes: totalLikes / postCount,
+        avgShares: totalShares / postCount,
+        avgComments: totalComments / postCount,
+      };
+    });
+
+    return averages;
+  }
+
+  const averageData = calculateAverageMetrics(data);
+
+  // Extracting the necessary data for the chart
+  const postTypes = averageData.map(item => item.Post_Type);
+  const avgLikes = averageData.map(item => item.avgLikes);
+  const avgShares = averageData.map(item => item.avgShares);
+  const avgComments = averageData.map(item => item.avgComments);
 
   return (
     <Box
@@ -44,7 +91,7 @@ export default function FlipCardBarChart() {
           height: '365px',
         }}
       >
-        {/* Front Side */}
+        {/* Front Side with the Average Metrics Chart */}
         <Card
           variant="outlined"
           sx={{
@@ -55,7 +102,7 @@ export default function FlipCardBarChart() {
         >
           <CardContent>
             <Typography component="h2" variant="subtitle2" gutterBottom>
-              Page views and downloads
+              Average Metrics by Post Type
             </Typography>
             <Stack sx={{ justifyContent: 'space-between' }}>
               <Stack
@@ -67,12 +114,11 @@ export default function FlipCardBarChart() {
                 }}
               >
                 <Typography variant="h4" component="p">
-                  1.3M
+                  Avg. Likes, Shares, and Comments
                 </Typography>
-                <Chip size="small" color="error" label="-8%" />
               </Stack>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                Page views and downloads for the last 6 months
+                {/* Average metrics for each post type */}
               </Typography>
             </Stack>
             <BarChart
@@ -82,30 +128,30 @@ export default function FlipCardBarChart() {
                 {
                   scaleType: 'band',
                   categoryGapRatio: 0.5,
-                  data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                  data: postTypes,
                 },
               ]}
               series={[
                 {
-                  id: 'page-views',
-                  label: 'Page views',
-                  data: [2234, 3872, 2998, 4125, 3357, 2789, 2998],
+                  id: 'avg-likes',
+                  label: 'Avg Likes',
+                  data: avgLikes,
                   stack: 'A',
                 },
                 {
-                  id: 'downloads',
-                  label: 'Downloads',
-                  data: [3098, 4215, 2384, 2101, 4752, 3593, 2384],
+                  id: 'avg-shares',
+                  label: 'Avg Shares',
+                  data: avgShares,
                   stack: 'A',
                 },
                 {
-                  id: 'conversions',
-                  label: 'Conversions',
-                  data: [4051, 2275, 3129, 4693, 3904, 2038, 2275],
+                  id: 'avg-comments',
+                  label: 'Avg Comments',
+                  data: avgComments,
                   stack: 'A',
                 },
               ]}
-              height={250}
+              height={265}
               margin={{ left: 50, right: 0, top: 20, bottom: 20 }}
               grid={{ horizontal: true }}
               slotProps={{
@@ -117,7 +163,7 @@ export default function FlipCardBarChart() {
           </CardContent>
         </Card>
 
-        {/* Back Side */}
+        {/* Back Side with a message */}
         <Card
           variant="outlined"
           sx={{
@@ -133,7 +179,7 @@ export default function FlipCardBarChart() {
           }}
         >
           <Typography variant="h6" align="center">
-            Flip back to see the bar chart
+            Flip back to see the average metrics
           </Typography>
         </Card>
       </Box>

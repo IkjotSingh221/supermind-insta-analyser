@@ -32,7 +32,7 @@ export default function AppNavbar() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+    setOpen(newOpen); 
   };
 
   return (
@@ -64,15 +64,15 @@ export default function AppNavbar() {
             sx={{ justifyContent: 'center', mr: 'auto' }}
           >
             <CustomIcon />
-            <Typography variant="h4" component="h1" sx={{ color: 'text.primary' }}>
+            {/* <Typography variant="h4" component="h1" sx={{ color: 'text.primary' }}>
               Dashboard
-            </Typography>
+            </Typography> */}
           </Stack>
           <ColorModeIconDropdown />
-          <MenuButton aria-label="menu" onClick={toggleDrawer(true)}>
+          {/* <MenuButton aria-label="menu" onClick={toggleDrawer(true)}>
             <MenuRoundedIcon />
-          </MenuButton>
-          <SideMenuMobile open={open} toggleDrawer={toggleDrawer} />
+          </MenuButton> */}
+          {/* <SideMenuMobile open={open} toggleDrawer={toggleDrawer} /> */}
         </Stack>
       </Toolbar>
     </AppBar>

@@ -10,38 +10,70 @@ import inputdata from "../../../data/finalOutput.json";
 
 ChartJS.register(MatrixController, MatrixElement, Tooltip, Title, CategoryScale, LinearScale);
 
+// Months of the year with number of days in each month
+const months = [
+  { name: "Jan", days: 31 },
+  { name: "Feb", days: 28 },  // Adjust February for leap years dynamically if needed
+  { name: "Mar", days: 31 },
+  { name: "Apr", days: 30 },
+  { name: "May", days: 31 },
+  { name: "Jun", days: 30 },
+  { name: "Jul", days: 31 },
+  { name: "Aug", days: 31 },
+  { name: "Sep", days: 30 },
+  { name: "Oct", days: 31 },
+  { name: "Nov", days: 30 },
+  { name: "Dec", days: 31 }
+];
+
+// Calculate weeks for each month dynamically
+const weeksInMonth = (days) => Math.ceil(days / 7);
+
+// Get the month for a given week number
+const getMonthForWeek = (week) => {
+  let totalWeeks = 0;
+  for (let i = 0; i < months.length; i++) {
+    const monthWeeks = weeksInMonth(months[i].days);
+    totalWeeks += monthWeeks;
+    if (week <= totalWeeks) {
+      return { month: months[i].name, weekNumber: week - (totalWeeks - monthWeeks) };
+    }
+  }
+  return { month: "", weekNumber: 0 }; // Default return in case of errors
+};
+
+// Function to process the post data
 function processPostData(posts) {
   const postdata = [];
   const dateCounts = {};
 
   // Count the number of posts for each date
   posts.forEach((post) => {
-    const date = post.Date_Posted; // Extract the date
+    const date = post.Date_Posted;
     dateCounts[date] = (dateCounts[date] || 0) + 1;
   });
 
-  // Helper function to calculate week of the year
   function getWeekOfYear(date) {
     const firstJan = new Date(date.getFullYear(), 0, 1);
     const days = Math.floor((date - firstJan) / (24 * 60 * 60 * 1000));
     return Math.ceil((days + firstJan.getDay() + 1) / 7);
   }
 
-  // Helper function to calculate day of the week (0 = Sunday, 6 = Saturday)
   function getDayOfWeek(date) {
     return date.getDay();
   }
 
-  // Populate the data array
   Object.entries(dateCounts).forEach(([date, count]) => {
-    const parsedDate = new Date(date); // Convert string to Date object
+    const parsedDate = new Date(date);
     const weekOfYear = getWeekOfYear(parsedDate);
     const dayOfWeek = getDayOfWeek(parsedDate);
+    const { month } = getMonthForWeek(weekOfYear);
 
     postdata.push({
       x: weekOfYear, // Week of the year
-      y: dayOfWeek, // Day of the week
-      v: count, // Contribution count
+      y: dayOfWeek,  // Day of the week
+      v: count,      // Contribution count
+      month: month,
     });
   });
 
@@ -58,19 +90,19 @@ const data = {
       backgroundColor: (ctx) => {
         const value = ctx.raw.v;
         return value === 1
-          ? "#A7C7E7"  // Lightest Blue for 1
+          ? "#D1E8D6"  // Light Green
           : value === 2
-            ? "#7AB1D4"  // Light Blue for 2
+            ? "#A5D8A3"  // Green
             : value === 3
-              ? "#4C8BD6"  // Medium Blue for 3
+              ? "#7BBF7F"  // Medium Green
               : value === 4
-                ? "#2378C3"  // Strong Blue for 4
+                ? "#47A14E"  // Dark Green
                 : value >= 5
-                  ? "#1A5A99"  // Dark Blue for 5 and above
-                  : "#ebedf0"; // Color scale based on the value
+                  ? "#2C7A32"  // Very Dark Green
+                  : "#ebedf0"; // Default Light gray
       },
-      width: (ctx) => ctx.chart.scales.x.width / 53, // Adjust for 53 weeks
-      height: (ctx) => ctx.chart.scales.y.height / 7, // Adjust for 7 days
+      width: (ctx) => ctx.chart.scales.x.width / 53,  // Adjust width for 52 weeks
+      height: (ctx) => ctx.chart.scales.y.height / 7,  // Adjust height for 7 days of the week
     },
   ],
 };
@@ -95,7 +127,10 @@ const options = {
       ticks: {
         stepSize: 1,
         callback: function (value) {
-          return `W${value + 1}`;
+          const { month } = getMonthForWeek(value + 1);  // Adjust for 1-based index
+          // Display month only for the first week of each month
+          const { weekNumber } = getMonthForWeek(value + 1);
+          return weekNumber === 1 ? month : '';
         },
         padding: 10,
       },
@@ -136,7 +171,7 @@ const FlipCardHeatmap = () => {
         perspective: "1000px",
         cursor: "pointer",
         width: "100%",
-        height: "250px",
+        height: "300px",
       }}
     >
       <Box
@@ -155,10 +190,15 @@ const FlipCardHeatmap = () => {
           sx={{
             position: "absolute",
             width: "100%",
-            // height: "100%",
             backfaceVisibility: "hidden",
           }}
         >
+          <Typography variant="h4" component="p">
+            User Activity Heatmap
+          </Typography>
+          <Typography component="h2" variant="subtitle2" gutterBottom>
+            Weekly user activity across days and months.
+          </Typography>
           <CardContent>
             <div style={{ height: "200px", width: "100%" }}>
               <Chart type="matrix" data={data} options={options} />
