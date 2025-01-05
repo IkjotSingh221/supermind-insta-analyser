@@ -140,15 +140,15 @@ import { useTheme } from '@mui/material/styles';
 const chartSetting = {
   yAxis: [
     {
-      label: 'Hashtag Frequency',
+      // label: 'Hashtag Frequency',
       sx: {
         fontWeight: 'bold', // Bold Y-axis label
         fontSize: '1.5rem', // Bigger Y-axis label
       },
     },
   ],
-  series: [{ dataKey: 'frequency', label: 'Hashtag Frequency' }],
-  height: 350,  // Reduced the height to make the chart more compact
+  series: [{ dataKey: 'frequency' }],
+  height: 280,  // Reduced the height to make the chart more compact
   sx: {
     [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
       transform: 'translateX(-12px)',
@@ -216,7 +216,7 @@ const HashtagFrequency = () => {
           height: "100%",
           transformStyle: "preserve-3d",
           transition: "transform 0.8s",
-          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transform: flipped ? "rotateX(180deg)" : "rotateX(0deg)",
         }}
       >
         {/* Front Side */}
@@ -230,6 +230,12 @@ const HashtagFrequency = () => {
           }}
         >
           <CardContent>
+            <Typography variant="h4" component="p">
+              Hashtag Frequency Bar Graph
+            </Typography>
+            <Typography component="h2" variant="subtitle2" gutterBottom>
+              A visualization of the most frequently used hashtags.
+            </Typography>
             <div style={{ height: "100%", width: "100%" }}>
               <BarChart
                 colors={colorPalette}
@@ -253,7 +259,7 @@ const HashtagFrequency = () => {
             height: "100%",
             backfaceVisibility: "hidden",
             backgroundColor: "#fff",
-            transform: "rotateY(180deg)",
+            transform: "rotateX(180deg)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

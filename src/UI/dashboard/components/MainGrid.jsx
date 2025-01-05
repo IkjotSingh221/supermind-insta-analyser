@@ -11,9 +11,11 @@ import HighlightedCard from "./HighlightedCard";
 import PageViewsBarChart from "./PageViewsBarChart";
 import SessionsChart from "./SessionsChart";
 import StatCard from "./StatCard";
+import StatCard2 from "./StatCard2";
+import TotalEngagementCard from "./TotalEngagementCard"
 import GitHubStyleHeatmap from "./Heatmap"; // Import the Heatmap component
 import WordCloud from "./Wordcloud"; // Import the WordCloud component
-import HashtagFrequency from "./HashtagFrequency";
+import HashtagFrequency from "./HashtagFrequency"; 
 
 const data = [
   {
@@ -61,11 +63,20 @@ export default function MainGrid() {
         columns={12}
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        {data.map((card, index) => (
+        {/* {data.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
             <StatCard {...card} />
           </Grid>
-        ))}
+        ))} */}
+        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+            <TotalEngagementCard />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+            <StatCard  />
+          </Grid>
+          <Grid  size={{ xs: 12, sm: 6, lg: 3 }}>
+            <StatCard2 />
+          </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
           <HighlightedCard />
         </Grid>
@@ -97,7 +108,7 @@ export default function MainGrid() {
       </Grid>
 
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Details
+        {/* Details */}
       </Typography>
       <Grid container spacing={2} columns={12}>
         <Grid size={{ xs: 12, lg: 9 }}>

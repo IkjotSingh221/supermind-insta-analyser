@@ -9,41 +9,43 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 import { areaElementClasses } from '@mui/x-charts/LineChart';
-import defaultData from "../../../data/finalOutput.json";
+import defaultData from "../../../data/finalOutput.json"; // Make sure this path is correct
 
-function getWeeklyEngagementData(posts) {
-  if (!Array.isArray(posts) || posts.length === 0) {
-    console.error("Invalid or empty data passed to getWeeklyEngagementData.");
-    return [];
-  }
+// Function to categorize caption length
+function categorizeCaptionLength(length) {
+  if (length <= 15) return "<=15 characters";
+  if (length > 15 && length <= 20) return ">15 and <=20 characters";
+  if (length > 20 && length <= 25) return ">20 and <=25 characters";
+  if (length > 25 && length <= 30) return ">25 and <=30 characters";
+  if (length > 30 && length <= 35) return ">30 and <=35 characters";
+  if (length > 35 && length <= 40) return ">35 and <=40 characters";
+  if (length > 40 && length <= 45) return ">40 and <=45 characters";
+  return ">45 characters";
+}
 
-  const weeklyData = {};
+// Function to prepare data for the chart
+function prepareDataForChart(posts) {
+  const categorizedData = {
+    "<=15 characters": 0,
+    ">15 and <=20 characters": 0,
+    ">20 and <=25 characters": 0,
+    ">25 and <=30 characters": 0,
+    ">30 and <=35 characters": 0,
+    ">35 and <=40 characters": 0,
+    ">40 and <=45 characters": 0,
+    ">45 characters": 0,
+  };
+
   posts.forEach((post) => {
-    const postDate = new Date(post.Date_Posted);
-    const weekNumber = getWeekNumber(postDate);
-    const year = postDate.getFullYear();
-    const weekKey = `${year}-W${weekNumber}`;
-
-    if (!weeklyData[weekKey]) {
-      weeklyData[weekKey] = { totalEngagement: 0, totalPosts: 0 };
-    }
-
-    weeklyData[weekKey].totalEngagement += post.Likes + post.Comments + post.Shares;
-    weeklyData[weekKey].totalPosts += 1;
+    const captionLength = post.Caption_Text ? post.Caption_Text.length : 0;
+    const category = categorizeCaptionLength(captionLength);
+    categorizedData[category] += post.Likes + post.Comments + post.Shares;
   });
 
-  return Object.entries(weeklyData).map(([week, { totalEngagement, totalPosts }]) => ({
-    week,
-    engagementRatio: totalEngagement / totalPosts,
-  }));
+  return categorizedData;
 }
 
-function getWeekNumber(date) {
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-  return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-}
-
+// Area gradient for the SparkLineChart
 function AreaGradient({ color, id }) {
   return (
     <defs>
@@ -60,17 +62,20 @@ AreaGradient.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
+// StatCard component
 function StatCard({
   data = defaultData,
   interval = "Last 7 Days",
-  title = "Weekly Likes, Comments and Shares",
-  trend = "up",
+  title = "Caption Length vs Engagement",
+  trend = "neutral",
   value = "N/A",
 }) {
   const theme = useTheme();
-  const weeklyEngagementData = getWeeklyEngagementData(data);
-  const chartData = weeklyEngagementData.map((item) => item.engagementRatio);
-  const labels = weeklyEngagementData.map((item) => item.week);
+  const categorizedData = prepareDataForChart(data);
+
+  // Extract chart data and labels
+  const chartData = Object.values(categorizedData);
+  const labels = Object.keys(categorizedData);
 
   const trendColors = {
     up:

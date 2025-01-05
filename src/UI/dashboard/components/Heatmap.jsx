@@ -87,7 +87,7 @@ const data = {
     {
       label: "Contributions",
       data: postData,
-      backgroundColor: (ctx) => {
+      backgroundColor: (ctx) => { 
         const value = ctx.raw.v;
         return value === 1
           ? "#D1E8D6"  // Light Green
