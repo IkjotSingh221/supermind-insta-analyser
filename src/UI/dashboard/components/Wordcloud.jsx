@@ -7,8 +7,8 @@ import Typography from "@mui/material/Typography";
 import data from "../../../data/hashtags.json";
 
 const options = {
-    rotations: 1,
-    rotationAngles: [0],
+    rotations: 2,
+    rotationAngles: [0,90],
     fontSizes: [15, 60],
     fontFamily: 'sans-serif',
     color: 'random-dark',
