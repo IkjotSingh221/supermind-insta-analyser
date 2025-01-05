@@ -13,6 +13,7 @@ import SessionsChart from "./SessionsChart";
 import StatCard from "./StatCard";
 import GitHubStyleHeatmap from "./Heatmap"; // Import the Heatmap component
 import WordCloud from "./Wordcloud"; // Import the WordCloud component
+import HashtagFrequency from "./HashtagFrequency";
 
 const data = [
   {
@@ -86,11 +87,15 @@ export default function MainGrid() {
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
         {/* Word Cloud */}
       </Typography>
-      <Grid container spacing={2} columns={12}>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <WordCloud /> {/* Add the WordCloud component here */} 
+      <Grid container spacing={2} >
+        <Grid size={{ xs: 6, md: 3 }}>
+          <WordCloud /> {/* Add the WordCloud component here */}
+        </Grid>
+        <Grid size={{ xs: 6, md: 9 }}>
+          <HashtagFrequency />
         </Grid>
       </Grid>
+
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
         Details
       </Typography>
@@ -100,7 +105,7 @@ export default function MainGrid() {
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
           <Stack gap={2} direction={{ xs: "column", sm: "row", lg: "column" }}>
-            <CustomizedTreeView />
+            {/* <CustomizedTreeView /> */}
             <ChartUserByCountry />
           </Stack>
         </Grid>
