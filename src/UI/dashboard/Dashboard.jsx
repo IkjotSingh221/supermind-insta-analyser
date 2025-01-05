@@ -33,7 +33,7 @@ export default function Dashboard(props) {
         {/* Main content */}
         <Box
           component="main"
-          sx={(theme) => ({
+          sx={(theme) => ({ 
             flexGrow: 1,
             backgroundColor: theme.vars
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
