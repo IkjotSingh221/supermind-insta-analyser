@@ -1,4 +1,4 @@
-import React,{useState } from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
@@ -7,6 +7,8 @@ import { Chart as ChartJS, Tooltip, Title, CategoryScale, LinearScale } from "ch
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
 import { Chart } from "react-chartjs-2";
 import inputdata from "../../../data/finalOutput.json";
+import ReactMarkdown from "react-markdown";
+import Button from "./Button";
 
 ChartJS.register(MatrixController, MatrixElement, Tooltip, Title, CategoryScale, LinearScale);
 
@@ -87,9 +89,11 @@ const data = {
     {
       label: "Contributions",
       data: postData,
-      backgroundColor: (ctx) => { 
+      backgroundColor: (ctx) => {
         const value = ctx.raw.v;
-        return value === 1
+        return value === 0 
+        ? "#ffffff":
+        value === 1
           ? "#D1E8D6"  // Light Green
           : value === 2
             ? "#A5D8A3"  // Green
@@ -99,7 +103,7 @@ const data = {
                 ? "#47A14E"  // Dark Green
                 : value >= 5
                   ? "#2C7A32"  // Very Dark Green
-                  : "#ebedf0"; // Default Light gray
+                  : "#ffffff"; // Default Light gray
       },
       width: (ctx) => ctx.chart.scales.x.width / 53,  // Adjust width for 52 weeks
       height: (ctx) => ctx.chart.scales.y.height / 7,  // Adjust height for 7 days of the week
@@ -134,6 +138,11 @@ const options = {
         },
         padding: 10,
       },
+      grid: {
+        display: false,  // Remove grid lines for the x-axis
+        drawOnChart:false,
+      },
+      borderColor: 'white',
     },
     y: {
       type: "linear",
@@ -146,6 +155,11 @@ const options = {
           return days[value];
         },
       },
+      grid: {
+        display: false,  // Remove grid lines for the x-axis
+        drawOnChart: false,
+      },
+      borderColor: 'white',
     },
   },
   plugins: {
@@ -166,7 +180,6 @@ const FlipCardHeatmap = () => {
 
   return (
     <Box
-      onClick={handleFlip}
       sx={{
         perspective: "1000px",
         cursor: "pointer",
@@ -193,6 +206,7 @@ const FlipCardHeatmap = () => {
             backfaceVisibility: "hidden",
           }}
         >
+          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor={'bg-green-100'} textColor={'text-green-950'} hoverColor={'bg-green-400'} activeBorder={'border-green-900'}/>
           <Typography variant="h4" component="p">
             User Activity Heatmap
           </Typography>
@@ -212,19 +226,61 @@ const FlipCardHeatmap = () => {
           sx={{
             position: "absolute",
             width: "100%",
-            height: "250px",
+            height: "fitContent",
+            minHeight:"300px",
             backfaceVisibility: "hidden",
             backgroundColor: "#fff",
-            transform: "rotateX(180deg)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            transform: "rotateX(180deg)"
+            // display: "flex",
+            // alignItems: "center",
+            // justifyContent: "center", 
           }}
         >
+          <Button onClick={handleFlip} text={'View Graph'} bgColor={'bg-green-100'} textColor={'text-green-950'} hoverColor={'bg-green-400'} activeBorder={'border-green-900'}/>
           <CardContent>
-            <Typography variant="h6" align="center">
-              Flip back to see the heatmap
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "1.5rem", // Increased font size for the back message
+                color: "text.secondary",
+                marginBottom: 2,
+              }}
+            >
+              Insights from User Activity Heatmap
             </Typography>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr", // Two equal columns
+                gap: "1rem", // Gap between columns
+              }}
+            >
+              <div>
+                <ReactMarkdown>
+                  {`
+### Key Observations:
+- **Peak Activity Days:** The darkest green blocks indicate high user activity, particularly on some Fridays and Saturdays. This highlights increased engagement towards the end of the week.
+- **Consistent Engagement:** Moderate activity is observed on weekdays (Monday to Thursday) throughout the year, represented by lighter shades of green.
+- **Seasonal Trends:** Higher engagement is noticeable during **March**, **May**, and **November**, which could align with key events, campaigns, or seasonal trends.
+        `}
+                </ReactMarkdown>
+              </div>
+              <div>
+                <ReactMarkdown>
+                  {`
+1. **Engagement Patterns:**
+   - **Weekends:** Fridays and Saturdays show the highest levels of user engagement.
+
+2. **Actionable Insights:**
+   - **Capitalize on Trends:** Schedule important updates, promotions, or events on Fridays and Saturdays to maximize engagement.
+   - **Seasonal Opportunities:** Use the activity spikes in March, May, and November to launch campaigns or features.
+   - **Boost Weekday Engagement:** Focus on interactive content or campaigns to increase activity during weekday lulls.
+        `}
+                </ReactMarkdown>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </Box>

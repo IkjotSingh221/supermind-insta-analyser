@@ -8,6 +8,8 @@ import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import data from "../../../data/finalOutput.json";
+import ReactMarkdown from "react-markdown";
+import Button from "./Button";
 
 export default function FlipCardBarChart() {
   const [flipped, setFlipped] = useState(false);
@@ -71,7 +73,6 @@ export default function FlipCardBarChart() {
 
   return (
     <Box
-      onClick={handleFlip}
       sx={{
         perspective: '1000px',
         cursor: 'pointer',
@@ -86,7 +87,7 @@ export default function FlipCardBarChart() {
           position: 'relative',
           transformStyle: 'preserve-3d',
           transition: 'transform 0.8s',
-          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transform: flipped ? 'rotateX(180deg)' : 'rotateX(0deg)',
           width: '100%',
           height: '365px',
         }}
@@ -100,6 +101,7 @@ export default function FlipCardBarChart() {
             backfaceVisibility: 'hidden',
           }}
         >
+          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
           <CardContent>
             <Typography component="h2" variant="subtitle2" gutterBottom>
               Average Metrics by Post Type
@@ -169,18 +171,46 @@ export default function FlipCardBarChart() {
           sx={{
             position: 'absolute',
             width: '100%',
-            height: '100%',
+            height: 'fitContent',
             backfaceVisibility: 'hidden',
             backgroundColor: '#fff',
-            transform: 'rotateY(180deg)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            transform: 'rotateX(180deg)'
+            // display: 'flex',
+            // alignItems: 'center',
+            // justifyContent: 'center',
           }}
         >
-          <Typography variant="h6" align="center">
-            Flip back to see the average metrics
+          <Button onClick={handleFlip} text={'View Graph'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Typography
+            variant="h6"
+            align="center"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1.5rem", // Increased font size for the back message
+              color: "text.secondary",
+              marginBottom: 2,
+            }}
+          >
+            Insights for the Average Metrics
           </Typography>
+          <ReactMarkdown>
+            {`
+
+### Overview
+The bar graph compares average likes, shares, and comments for three post types: **Carousel**, **Reel**, and **Static**. The y-axis represents the total average engagement (likes, shares, and comments) for each post type, with values reaching up to 1,000.
+
+### Insights
+1. **Reels perform the best** in terms of engagement, surpassing both Carousel and Static posts. They exhibit the highest overall contribution from likes, shares, and comments.
+2. **Carousel posts** follow closely, with slightly lower engagement than Reels but outperforming Static posts.
+3. **Static posts** have the lowest engagement, though they still generate consistent activity across all metrics.
+
+### Strategic Recommendations
+- Prioritize **Reels** for maximum audience interaction and engagement.
+- Use **Carousels** for balanced content that still drives notable engagement.
+- Leverage **Static posts** for specific purposes (e.g., announcements) but combine with other formats for better overall performance.
+
+              `}
+          </ReactMarkdown>
         </Card>
       </Box>
     </Box>

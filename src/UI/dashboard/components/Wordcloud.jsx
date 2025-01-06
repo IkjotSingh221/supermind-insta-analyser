@@ -16,11 +16,11 @@ const options = {
 };
 
 const WordCloudComponent = () => {
-    const [flipped, setFlipped] = useState(false);
+    // const [flipped, setFlipped] = useState(false);
 
-    const handleFlip = () => {
-        setFlipped(!flipped);
-    };
+    // const handleFlip = () => {
+    //     setFlipped(!flipped);
+    // };
 
     // Function to count hashtags
     function countHashtags() {
@@ -45,7 +45,7 @@ const WordCloudComponent = () => {
 
     return (
         <Box
-            onClick={handleFlip}
+            // onClick={handleFlip}
             sx={{
                 perspective: "1000px",
                 cursor: "pointer",
@@ -58,9 +58,9 @@ const WordCloudComponent = () => {
                     position: "relative",
                     width: "100%",
                     height: "100%",
-                    transformStyle: "preserve-3d",
-                    transition: "transform 0.8s",
-                    transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+                    // transformStyle: "preserve-3d",
+                    // transition: "transform 0.8s",
+                    // transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
                 }}
             >
                 {/* Front Side */}
