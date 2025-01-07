@@ -188,7 +188,7 @@ const options = {
   },
 };
 
-const FlipCardHeatmap = () => {
+const FlipCardHeatmap = () => { 
   const [flipped, setFlipped] = useState(false);
 
   const handleFlip = () => {
@@ -255,6 +255,7 @@ const FlipCardHeatmap = () => {
             backfaceVisibility: "hidden",
             backgroundColor: "#fff",
             transform: "rotateX(180deg)",
+            overflowY:"scroll",
           }}
         >
           <Button

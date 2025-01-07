@@ -62,7 +62,7 @@ export default function MainGrid() {
         <Grid size={{ xs: 6, md: 3 }}>
           <WordCloud /> {/* Add the WordCloud component here */}
         </Grid>
-        <Grid size={{ xs: 6, md: 9 }}>
+        <Grid size={{ xs: 6, md: 9 }}> 
           <HashtagFrequency />
         </Grid>
       </Grid>
