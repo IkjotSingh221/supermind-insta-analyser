@@ -6,6 +6,7 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 import warnings
+from fastapi.middleware.cors import CORSMiddleware
 
 try:
     from langflow.load import upload_file
@@ -18,6 +19,15 @@ load_dotenv()
 
 # FastAPI app instance
 app = FastAPI()
+
+#cors
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Constants
 BASE_API_URL = "https://api.langflow.astra.datastax.com"
@@ -86,7 +96,7 @@ def chatbot_endpoint(request: ChatbotRequest):
             tweaks=request.tweaks,
             application_token=APPLICATION_TOKEN
         )
-        return response
+        return response["outputs"][0]["outputs"][0]["results"]["message"]["text"]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
