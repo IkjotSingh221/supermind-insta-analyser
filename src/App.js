@@ -12,7 +12,7 @@ function App() {
     <div className="app-container">
       <div className="content-container">
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          {/* <Route path="/login" element={<LoginPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/chat" element={<ChatPage />} />

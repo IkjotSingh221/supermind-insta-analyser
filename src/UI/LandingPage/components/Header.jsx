@@ -23,14 +23,14 @@ function Header() {
           <a href="#footer " className="text-gray-600 hover:text-blue-600">Contact Us</a>
         </div>
 
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <button 
             onClick={() => navigate('/login')}
             className="px-8 py-2  bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Login
           </button>
-          </div>
+          </div> */}
         <div className="flex items-center space-x-4">
         </div>
       </nav>

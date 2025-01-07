@@ -98,6 +98,7 @@ export default function FlipCardBarChart() {
             position: 'absolute',
             width: '100%',
             backfaceVisibility: 'hidden',
+            height:'100%',
           }}
         >
           <Button onClick={handleFlip} text={'Get AI Insights'} bgColor='bg-blue-100' textColor='text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900' />
