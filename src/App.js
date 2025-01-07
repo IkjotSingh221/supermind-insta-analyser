@@ -4,27 +4,29 @@ import "./App.css";
 import Dashboard from "./UI/dashboard/Dashboard";
 import LandingPage from "./UI/LandingPage/LandingPage";
 import ChatPage from "./UI/chat/ChatPage";
+import LoginPage from "./UI/LandingPage/components/LoginPage";
 function App() {
-  
+
   return (
     // <Router> 
-      <div className="app-container">
-        <div className="content-container">
+    <div className="app-container">
+      <div className="content-container">
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<LandingPage/>}/>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/chat" element={<ChatPage />} />
         </Routes>
-        </div>
-        
       </div>
+
+    </div>
   );
 }
 
 export default function AppWrapper() {
-  return(
+  return (
     <Router>
-      <App/>
+      <App />
     </Router>
   );
 }
