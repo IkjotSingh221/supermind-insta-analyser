@@ -20,8 +20,8 @@ function ChatHeader() {
             <Bot className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">AI Assistant</h1>
-            <p className="text-sm text-gray-500">Always here to help</p>
+            <h1 className="text-xl font-semibold text-gray-800">TrendWiz</h1>
+            <p className="text-sm text-gray-500">Your personal social media Wizard</p>
           </div>
         </div>
       </div>

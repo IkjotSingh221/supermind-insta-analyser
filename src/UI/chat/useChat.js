@@ -29,15 +29,16 @@ export function useChat() {
     ]);
 
     try {
+      const payload = { message: text };
+      console.log("Payload being sent to the backend:", payload);
+
       // Make API request to the FastAPI endpoint
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          message: text, // User's message
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {

@@ -36,16 +36,17 @@ ENDPOINT = ""  # Replace with the new endpoint name if set
 
 # Default tweaks dictionary for the new workflow
 TWEAKS = {
-    "ChatInput-NEW_ID": {},  # Replace with actual component IDs for your workflow
-    "ChatOutput-NEW_ID": {},
-    "Prompt-NEW_ID": {},
-    "AstraDB-NEW_ID": {},
-    "ParseData-NEW_ID": {},
-    "Google Generative AI Embeddings-NEW_ID": {},
-    "AstraDBChatMemory-NEW_ID": {},
-    "StoreMessage-NEW_ID": {},
-    "Memory-NEW_ID": {},
-    "GoogleGenerativeAIModel-NEW_ID": {}
+  "ChatInput-ddPlI": {},
+  "ChatOutput-nXTZZ": {},
+  "ParseData-uxutG": {},
+  "AstraDB-ATQng": {},
+  "Google Generative AI Embeddings-MIHqR": {},
+  "GoogleGenerativeAIModel-EyrrG": {},
+  "Prompt-TQBt4": {},
+  "StoreMessage-ArGC0": {},
+  "Memory-gjP4B": {},
+  "AstraDBChatMemory-eZZ3L": {},
+  "TextInput-qQoDx": {}
 }
 
 # Helper function to run the flow
