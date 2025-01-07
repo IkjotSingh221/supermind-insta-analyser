@@ -1,26 +1,24 @@
 import os
-from dotenv import load_dotenv
 import json
 import requests
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import warnings
 from fastapi.middleware.cors import CORSMiddleware
-
-try:
-    from langflow.load import upload_file
-except ImportError:
-    warnings.warn("Langflow provides a function to help you upload files to the flow. Please install langflow to use it.")
-    upload_file = None
+from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
+try:
+    from langflow.load import upload_file
+except ImportError:
+    upload_file = None
+
 # FastAPI app instance
 app = FastAPI()
 
-#cors
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,36 +29,42 @@ app.add_middleware(
 
 # Constants
 BASE_API_URL = "https://api.langflow.astra.datastax.com"
-LANGFLOW_ID = "8958d971-851b-41ce-945e-4aad6bd195e6"
-FLOW_ID = "45fc3207-971a-4332-bb2f-106f629d87fe"
+LANGFLOW_ID = "8958d971-851b-41ce-945e-4aad6bd195e6"  # Replace with the new Langflow ID if applicable
+FLOW_ID = "91d0167d-0f3e-454f-adb8-5a1359034987"  # Replace with the new Flow ID
 APPLICATION_TOKEN = os.getenv("APPLICATION_TOKEN")
+ENDPOINT = ""  # Replace with the new endpoint name if set
 
-# Default tweaks dictionary
+# Default tweaks dictionary for the new workflow
 TWEAKS = {
-    "ChatInput-sc1Iq": {},
-    "ChatOutput-3p84t": {},
-    "Agent-4NFeL": {},
-    "Prompt-hOVm7": {},
-    "AstraDB-vQnJk": {},
-    "ParseData-XLpZq": {},
-    "Google Generative AI Embeddings-1ZEge": {}
+    "ChatInput-NEW_ID": {},  # Replace with actual component IDs for your workflow
+    "ChatOutput-NEW_ID": {},
+    "Prompt-NEW_ID": {},
+    "AstraDB-NEW_ID": {},
+    "ParseData-NEW_ID": {},
+    "Google Generative AI Embeddings-NEW_ID": {},
+    "AstraDBChatMemory-NEW_ID": {},
+    "StoreMessage-NEW_ID": {},
+    "Memory-NEW_ID": {},
+    "GoogleGenerativeAIModel-NEW_ID": {}
 }
 
-# Request model for chatbot inputs
-class ChatbotRequest(BaseModel):
-    message: str
-    endpoint: str = FLOW_ID
-    output_type: str = "chat"
-    input_type: str = "chat"
-    tweaks: Optional[dict] = TWEAKS
-
 # Helper function to run the flow
-def run_flow(message: str,
-             endpoint: str,
-             output_type: str = "chat",
-             input_type: str = "chat",
-             tweaks: Optional[dict] = None,
-             application_token: Optional[str] = None) -> dict:
+def run_flow(
+    message: str,
+    endpoint: str,
+    output_type: str = "chat",
+    input_type: str = "chat",
+    tweaks: Optional[dict] = None,
+    application_token: Optional[str] = None
+) -> dict:
+    """
+    Run a flow with a given message and optional tweaks.
+
+    :param message: The message to send to the flow
+    :param endpoint: The ID or the endpoint name of the flow
+    :param tweaks: Optional tweaks to customize the flow
+    :return: The JSON response from the flow
+    """
     api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{endpoint}"
 
     payload = {
@@ -70,13 +74,24 @@ def run_flow(message: str,
     }
     if tweaks:
         payload["tweaks"] = tweaks
-    headers = {"Authorization": f"Bearer {application_token}", "Content-Type": "application/json"}
+    headers = {
+        "Authorization": f"Bearer {application_token}",
+        "Content-Type": "application/json"
+    }
     response = requests.post(api_url, json=payload, headers=headers)
 
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     return response.json()
+
+# Request model for chatbot inputs
+class ChatbotRequest(BaseModel):
+    message: str
+    endpoint: str = ENDPOINT or FLOW_ID
+    output_type: str = "chat"
+    input_type: str = "chat"
+    tweaks: Optional[dict] = TWEAKS
 
 # FastAPI endpoint
 @app.post("/chat")
@@ -100,8 +115,8 @@ def chatbot_endpoint(request: ChatbotRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # Run the FastAPI app
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+
