@@ -92,8 +92,9 @@ export default function ChartEmojiUsage() {
       sx={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}
     >
       <CardContent>
-        <Typography component="h2" variant="subtitle2" sx={{  fontWeight: 'medium', fontSize : '20px' // You can adjust the size as needed
-  }}>
+        <Typography component="h2" variant="subtitle2" sx={{
+          fontWeight: 'medium', fontSize: '20px' // You can adjust the size as needed
+        }}>
           Emoji Usage Distribution
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -131,27 +132,62 @@ export default function ChartEmojiUsage() {
           <Stack
             key={index}
             direction="row"
-            sx={{ alignItems: 'center', gap: 2, pb: 2 }}
+            sx={{
+              alignItems: 'center',
+              gap: 2,
+              pb: 2,
+              width: '100%', // Ensure consistent width
+            }}
           >
-            <Box sx={{ fontSize: '2rem' }}>{emoji.label}</Box>
-            <Stack sx={{ gap: 1, flexGrow: 1 }}>
+            {/* Emoji */}
+            <Box
+              sx={{
+                fontSize: '2rem',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '50px', // Set a fixed width for consistent alignment
+              }}
+            >
+              {emoji.label}
+            </Box>
+
+            {/* Bar with percentage */}
+            <Stack
+              sx={{
+                gap: 1,
+                flexGrow: 1, // Take up remaining space
+                width: 'calc(100% - 50px)', // Account for emoji width
+              }}
+            >
+              {/* Percentage */}
               <Stack
                 direction="row"
                 sx={{
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  gap: 2,
                 }}
               >
-                <Typography variant="body2" sx={{ color: 'text.secondary',fontWeight: '600', fontSize: '1rem' }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.secondary',
+                    fontWeight: '600',
+                    fontSize: '1rem',
+                  }}
+                >
                   {((emoji.value / totalValue) * 100).toFixed(2)}%
                 </Typography>
               </Stack>
+
+              {/* Progress Bar */}
               <LinearProgress
                 variant="determinate"
                 aria-label="Emoji usage"
                 value={(emoji.value / totalValue) * 100}
                 sx={{
+                  height: '10px', // Adjust bar height for better visibility
+                  borderRadius: '5px',
                   [`& .${linearProgressClasses.bar}`]: {
                     backgroundColor: vibrantColors[index % vibrantColors.length],
                   },
@@ -160,6 +196,7 @@ export default function ChartEmojiUsage() {
             </Stack>
           </Stack>
         ))}
+
       </CardContent>
     </Card>
   );

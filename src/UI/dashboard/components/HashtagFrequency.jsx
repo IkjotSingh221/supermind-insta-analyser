@@ -10,7 +10,7 @@ import ReactMarkdown from "react-markdown";
 import Button from "./Button";
 
 const chartSetting = {
-  height: 280, 
+  height: 280,
 };
 
 const HashtagFrequency = () => {
@@ -51,7 +51,7 @@ const HashtagFrequency = () => {
         perspective: "1000px",
         cursor: "pointer",
         width: "100%",
-        height: "350px",
+        height: "350px", // Consistent height for the container
       }}
     >
       <Box
@@ -70,11 +70,18 @@ const HashtagFrequency = () => {
           sx={{
             position: "absolute",
             width: "100%",
-            height: "100%",
+            height: "100%", // Ensure it fills the container
             backfaceVisibility: "hidden",
           }}
         >
-          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Button
+            onClick={handleFlip}
+            text="Get AI Insights"
+            bgColor="bg-blue-100"
+            textColor="text-blue-900"
+            hoverColor="bg-blue-300"
+            activeBorder="border-blue-900"
+          />
           <CardContent>
             <Typography variant="h4" component="p">
               Hashtag Frequency Bar Graph
@@ -91,14 +98,9 @@ const HashtagFrequency = () => {
                   {
                     scaleType: "band",
                     dataKey: "hashtag",
-                    // label: "Hashtags",
                   },
                 ]}
-                yAxis={[
-                  {
-                    // label: "Frequency",
-                  },
-                ]}
+                yAxis={[{}]}
                 series={[{ dataKey: "frequency" }]}
                 {...chartSetting}
               />
@@ -112,23 +114,28 @@ const HashtagFrequency = () => {
           sx={{
             position: "absolute",
             width: "100%",
-            height: "fitContent",
+            height: "100%", // Match the height and width of the front card
             backfaceVisibility: "hidden",
             backgroundColor: "#fff",
-            transform: "rotateX(180deg)",
-            // display: "flex",
-            // alignItems: "center",
-            // justifyContent: "center",
+            transform: "rotateX(180deg)", // Rotate for back visibility
+            overflowY:"scroll",
           }}
         >
-          <Button onClick={handleFlip} text={'View Graph'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Button
+            onClick={handleFlip}
+            text="View Graph"
+            bgColor="bg-blue-100"
+            textColor="text-blue-900"
+            hoverColor="bg-blue-300"
+            activeBorder="border-blue-900"
+          />
           <CardContent>
             <Typography
               variant="h6"
               align="center"
               sx={{
                 fontWeight: "bold",
-                fontSize: "1.5rem", // Increased font size for the back message
+                fontSize: "1.5rem",
                 color: "text.secondary",
                 marginBottom: 2,
               }}
@@ -148,12 +155,13 @@ const HashtagFrequency = () => {
 **Applications**
 - **Content Strategy**: Utilize high-frequency hashtags like **#mood**, **#happiness**, and **#goodvibes** to enhance visibility and engagement.
 - **Audience Understanding**: The combination of positive and challenging hashtags showcases an audience interested in expressing a full range of experiences, from achievements to struggles.
-              `}
+          `}
             </ReactMarkdown>
           </CardContent>
         </Card>
       </Box>
     </Box>
+
   );
 };
 

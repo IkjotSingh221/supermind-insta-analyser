@@ -34,11 +34,10 @@ function getMonthName(dateString) {
   return `${month} ${year}`;
 }
 
-export default function SessionsChart() {
+export default function SessionsChart() { 
   const [flipped, setFlipped] = useState(false);
   const theme = useTheme();
 
-  // Grouping data by month and calculating the totals for likes, comments, and shares
   const groupedData = data.reduce((acc, post) => {
     const month = getMonthName(post.Date_Posted);
     if (!acc[month]) {
@@ -51,14 +50,12 @@ export default function SessionsChart() {
     return acc;
   }, {});
 
-  // Sort months in chronological order
   const sortedMonths = Object.keys(groupedData).sort((a, b) => {
     const dateA = new Date(a);
     const dateB = new Date(b);
     return dateA - dateB;
   });
 
-  // Calculate the monthly averages for likes, comments, and shares
   const avgLikes = sortedMonths.map(month => groupedData[month].likes / groupedData[month].count);
   const avgComments = sortedMonths.map(month => groupedData[month].comments / groupedData[month].count);
   const avgShares = sortedMonths.map(month => groupedData[month].shares / groupedData[month].count);
@@ -69,7 +66,7 @@ export default function SessionsChart() {
     theme.palette.primary.dark,
   ];
 
-  const handleFlip = (event) => {
+  const handleFlip = () => {
     setFlipped(!flipped);
   };
 
@@ -84,7 +81,6 @@ export default function SessionsChart() {
         width: '100%',
       }}
     >
-
       <Box
         sx={{
           position: 'relative',
@@ -92,7 +88,7 @@ export default function SessionsChart() {
           transition: 'transform 0.8s',
           transform: flipped ? 'rotateX(180deg)' : 'rotateX(0deg)',
           width: '100%',
-          height: '365px',
+          height: '365px', // Ensuring both sides have the same height
         }}
       >
         {/* Front Side */}
@@ -101,10 +97,18 @@ export default function SessionsChart() {
           sx={{
             position: 'absolute',
             width: '100%',
+            height: '100%', // Ensures consistency
             backfaceVisibility: 'hidden',
           }}
         >
-          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Button 
+            onClick={handleFlip} 
+            text={'Get AI Insights'} 
+            bgColor='bg-blue-100' 
+            textColor='text-blue-900' 
+            hoverColor='bg-blue-300' 
+            activeBorder='border-blue-900' 
+          />
           <CardContent>
             <Typography component="h2" variant="subtitle2" gutterBottom>
               Average Likes, Comments, and Shares (Monthly)
@@ -139,11 +143,6 @@ export default function SessionsChart() {
               height={250}
               margin={{ left: 50, right: 20, top: 20, bottom: 20 }}
               grid={{ horizontal: true }}
-              sx={{
-                '& .MuiAreaElement-series-shares': { fill: "url('#shares')" },
-                '& .MuiAreaElement-series-comments': { fill: "url('#comments')" },
-                '& .MuiAreaElement-series-likes': { fill: "url('#likes')" },
-              }}
               slotProps={{
                 legend: { hidden: true },
               }}
@@ -161,27 +160,36 @@ export default function SessionsChart() {
           sx={{
             position: 'absolute',
             width: '100%',
-            height: 'fitContent',
+            height: '100%', // Matches the height of the front card
             backfaceVisibility: 'hidden',
             backgroundColor: '#fff',
             transform: 'rotateX(180deg)',
+            overflowY:"scroll",
           }}
         >
-          <Button onClick={handleFlip} text={'View Graph'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Button 
+            onClick={handleFlip} 
+            text={'View Graph'} 
+            bgColor='bg-blue-100' 
+            textColor='text-blue-900' 
+            hoverColor='bg-blue-300' 
+            activeBorder='border-blue-900' 
+          />
           <Typography
             variant="h6"
             align="center"
             sx={{
               fontWeight: "bold",
-              fontSize: "1.5rem", // Increased font size for the back message
+              fontSize: "1.5rem",
               color: "text.secondary",
               marginBottom: 2,
             }}
           >
             Insights for Monthly Average Engagement
           </Typography>
-          <ReactMarkdown>
-            {`
+          <CardContent>
+            <ReactMarkdown>
+              {`
 
 **Monthly Engagement Overview:**
 
@@ -198,11 +206,10 @@ export default function SessionsChart() {
 - Experiment with marketing strategies
 - Monitor comments and shares for feedback
               `}
-          </ReactMarkdown>
+            </ReactMarkdown>
+          </CardContent>
         </Card>
       </Box>
-
-      
     </Box>
   );
 }
