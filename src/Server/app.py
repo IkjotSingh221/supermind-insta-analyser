@@ -1,24 +1,47 @@
-import os
-import json
-import requests
-from typing import Optional
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query, Body
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional, Dict
+import requests
+import json
+import warnings
+import os
 from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
+#cors
+from fastapi.middleware.cors import CORSMiddleware
 
 try:
     from langflow.load import upload_file
 except ImportError:
+    warnings.warn("Langflow provides a function to help you upload files to the flow. Please install langflow to use it.")
     upload_file = None
 
-# FastAPI app instance
-app = FastAPI(docs_url="/")
+load_dotenv()
 
-# CORS middleware
+# Configuration
+BASE_API_URL = "https://api.langflow.astra.datastax.com"
+LANGFLOW_ID = "2b278d29-6c82-476f-a40d-1bd38dda3693"
+FLOW_ID = "6b942e00-f3ac-4a73-af3a-3834dd3e7cde"
+APPLICATION_TOKEN = os.getenv("APPLICATION_TOKEN")
+ENDPOINT = ""  # You can set a specific endpoint name in the flow settings
+
+TWEAKS = {
+  "ChatInput-Mvfj0": {},
+  "AstraDB-WmXFD": {},
+  "ChatOutput-4GJjy": {},
+  "Prompt-wcMxC": {},
+  "ParseData-ExE58": {},
+  "Google Generative AI Embeddings-hLLaH": {},
+  "AstraDBChatMemory-kh85t": {},
+  "TextInput-EPK6r": {},
+  "StoreMessage-NNEnM": {},
+  "Memory-adOSG": {},
+  "GoogleGenerativeAIModel-pmDwz": {},
+  "Prompt-UZ2ko": {},
+  "GoogleGenerativeAIModel-Z3ucd": {}
+}
+
+# Initialize FastAPI app
+app = FastAPI(title="LangFlow API", description="FastAPI Wrapper for LangFlow", version="1.0.0", docs_url="/")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,45 +50,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Constants
-BASE_API_URL = "https://api.langflow.astra.datastax.com"
-LANGFLOW_ID = "8958d971-851b-41ce-945e-4aad6bd195e6"  # Replace with the new Langflow ID if applicable
-FLOW_ID = "91d0167d-0f3e-454f-adb8-5a1359034987"  # Replace with the new Flow ID
-APPLICATION_TOKEN = os.getenv("APPLICATION_TOKEN")
-ENDPOINT = ""  # Replace with the new endpoint name if set
 
-# Default tweaks dictionary for the new workflow
-TWEAKS = {
-  "ChatInput-ddPlI": {},
-  "ChatOutput-nXTZZ": {},
-  "ParseData-uxutG": {},
-  "AstraDB-ATQng": {},
-  "Google Generative AI Embeddings-MIHqR": {},
-  "GoogleGenerativeAIModel-EyrrG": {},
-  "Prompt-TQBt4": {},
-  "StoreMessage-ArGC0": {},
-  "Memory-gjP4B": {},
-  "AstraDBChatMemory-eZZ3L": {},
-  "TextInput-qQoDx": {}
-}
+# Pydantic models for request and response validation
+class FlowRequest(BaseModel):
+    message: str
+    endpoint: Optional[str] = FLOW_ID
+    tweaks: Optional[Dict] = TWEAKS
+    application_token: Optional[str] = APPLICATION_TOKEN
+    output_type: Optional[str] = "chat"
+    input_type: Optional[str] = "chat"
 
-# Helper function to run the flow
+
+# Utility function to run the flow
 def run_flow(
     message: str,
-    endpoint: str,
+    endpoint: str = FLOW_ID,
     output_type: str = "chat",
     input_type: str = "chat",
-    tweaks: Optional[dict] = None,
-    application_token: Optional[str] = None
+    tweaks: Optional[Dict] = None,
+    application_token: Optional[str] = None,
 ) -> dict:
-    """
-    Run a flow with a given message and optional tweaks.
-
-    :param message: The message to send to the flow
-    :param endpoint: The ID or the endpoint name of the flow
-    :param tweaks: Optional tweaks to customize the flow
-    :return: The JSON response from the flow
-    """
     api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{endpoint}"
 
     payload = {
@@ -73,36 +77,21 @@ def run_flow(
         "output_type": output_type,
         "input_type": input_type,
     }
+    headers = None
     if tweaks:
         payload["tweaks"] = tweaks
-    headers = {
-        "Authorization": f"Bearer {application_token}",
-        "Content-Type": "application/json"
-    }
+    if application_token:
+        headers = {"Authorization": "Bearer " + application_token, "Content-Type": "application/json"}
+    
     response = requests.post(api_url, json=payload, headers=headers)
-
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail=response.text)
-
     return response.json()
 
-# Request model for chatbot inputs
-class ChatbotRequest(BaseModel):
-    message: str
-    endpoint: str = ENDPOINT or FLOW_ID
-    output_type: str = "chat"
-    input_type: str = "chat"
-    tweaks: Optional[dict] = TWEAKS
 
-# FastAPI endpoint
+# Endpoint to run a LangFlow flow
 @app.post("/chat")
-def chatbot_endpoint(request: ChatbotRequest):
-    """
-    Chatbot endpoint that processes user messages and interacts with the Langflow API.
-
-    :param request: ChatbotRequest object containing user inputs
-    :return: JSON response from the Langflow API
-    """
+async def run_flow_endpoint(request: FlowRequest):
     try:
         response = run_flow(
             message=request.message,
@@ -110,14 +99,19 @@ def chatbot_endpoint(request: ChatbotRequest):
             output_type=request.output_type,
             input_type=request.input_type,
             tweaks=request.tweaks,
-            application_token=APPLICATION_TOKEN
+            application_token=request.application_token,
         )
+        print(response)
         return response["outputs"][0]["outputs"][0]["results"]["message"]["text"]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Root Endpoint
+@app.get("/", tags=["Root"])
+async def read_root():
+    return {"message": "Welcome to the LangFlow FastAPI Wrapper"}
 
 # Run the FastAPI app
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
-
