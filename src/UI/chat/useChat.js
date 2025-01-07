@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-const API_URL = "http://localhost:8000/chat"; // Replace with your backend URL
+const API_URL = "https://supermind-insta-analyser.onrender.com/chat";
 
 export function useChat() {
   const [messages, setMessages] = useState([

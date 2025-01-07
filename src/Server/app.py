@@ -16,7 +16,7 @@ except ImportError:
     upload_file = None
 
 # FastAPI app instance
-app = FastAPI()
+app = FastAPI(docs_url="/")
 
 # CORS middleware
 app.add_middleware(
