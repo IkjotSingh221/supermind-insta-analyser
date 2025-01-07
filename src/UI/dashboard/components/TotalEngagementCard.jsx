@@ -5,7 +5,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import importedData from "../../../data/finalOutput.json";
-import ReactMarkdown from "react-markdown";
 
 function TotalEngagementCard({ data = importedData }) {
   if (!data || !Array.isArray(data) || data.length === 0) {

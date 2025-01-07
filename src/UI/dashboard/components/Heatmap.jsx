@@ -3,19 +3,33 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Chart as ChartJS, Tooltip, Title, CategoryScale, LinearScale } from "chart.js";
+import remarkGfm from "remark-gfm";
+import {
+  Chart as ChartJS,
+  Tooltip,
+  Title,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
 import { MatrixController, MatrixElement } from "chartjs-chart-matrix";
 import { Chart } from "react-chartjs-2";
 import inputdata from "../../../data/finalOutput.json";
 import ReactMarkdown from "react-markdown";
 import Button from "./Button";
 
-ChartJS.register(MatrixController, MatrixElement, Tooltip, Title, CategoryScale, LinearScale);
+ChartJS.register(
+  MatrixController,
+  MatrixElement,
+  Tooltip,
+  Title,
+  CategoryScale,
+  LinearScale
+);
 
 // Months of the year with number of days in each month
 const months = [
   { name: "Jan", days: 31 },
-  { name: "Feb", days: 28 },  // Adjust February for leap years dynamically if needed
+  { name: "Feb", days: 28 }, // Adjust February for leap years dynamically if needed
   { name: "Mar", days: 31 },
   { name: "Apr", days: 30 },
   { name: "May", days: 31 },
@@ -25,7 +39,7 @@ const months = [
   { name: "Sep", days: 30 },
   { name: "Oct", days: 31 },
   { name: "Nov", days: 30 },
-  { name: "Dec", days: 31 }
+  { name: "Dec", days: 31 },
 ];
 
 // Calculate weeks for each month dynamically
@@ -38,7 +52,10 @@ const getMonthForWeek = (week) => {
     const monthWeeks = weeksInMonth(months[i].days);
     totalWeeks += monthWeeks;
     if (week <= totalWeeks) {
-      return { month: months[i].name, weekNumber: week - (totalWeeks - monthWeeks) };
+      return {
+        month: months[i].name,
+        weekNumber: week - (totalWeeks - monthWeeks),
+      };
     }
   }
   return { month: "", weekNumber: 0 }; // Default return in case of errors
@@ -73,8 +90,8 @@ function processPostData(posts) {
 
     postdata.push({
       x: weekOfYear, // Week of the year
-      y: dayOfWeek,  // Day of the week
-      v: count,      // Contribution count
+      y: dayOfWeek, // Day of the week
+      v: count, // Contribution count
       month: month,
     });
   });
@@ -91,22 +108,22 @@ const data = {
       data: postData,
       backgroundColor: (ctx) => {
         const value = ctx.raw.v;
-        return value === 0 
-        ? "#ffffff":
-        value === 1
-          ? "#D1E8D6"  // Light Green
+        return value === 0
+          ? "#ffffff"
+          : value === 1
+          ? "#D7E8F6" // Light Green
           : value === 2
-            ? "#A5D8A3"  // Green
-            : value === 3
-              ? "#7BBF7F"  // Medium Green
-              : value === 4
-                ? "#47A14E"  // Dark Green
-                : value >= 5
-                  ? "#2C7A32"  // Very Dark Green
-                  : "#ffffff"; // Default Light gray
+          ? "#A3D0F4" // Green
+          : value === 3
+          ? "#7EB8E8" // Medium Green
+          : value === 4
+          ? "#4C99DA" // Dark Green
+          : value >= 5
+          ? "#316DAC" // Very Dark Green
+          : "#ffffff"; // Default Light gray
       },
-      width: (ctx) => ctx.chart.scales.x.width / 53,  // Adjust width for 52 weeks
-      height: (ctx) => ctx.chart.scales.y.height / 7,  // Adjust height for 7 days of the week
+      width: (ctx) => ctx.chart.scales.x.width / 53, // Adjust width for 52 weeks
+      height: (ctx) => ctx.chart.scales.y.height / 7, // Adjust height for 7 days of the week
     },
   ],
 };
@@ -131,18 +148,18 @@ const options = {
       ticks: {
         stepSize: 1,
         callback: function (value) {
-          const { month } = getMonthForWeek(value + 1);  // Adjust for 1-based index
+          const { month } = getMonthForWeek(value + 1); // Adjust for 1-based index
           // Display month only for the first week of each month
           const { weekNumber } = getMonthForWeek(value + 1);
-          return weekNumber === 1 ? month : '';
+          return weekNumber === 1 ? month : "";
         },
         padding: 10,
       },
       grid: {
-        display: false,  // Remove grid lines for the x-axis
-        drawOnChart:false,
+        display: false, // Remove grid lines for the x-axis
+        drawOnChart: false,
       },
-      borderColor: 'white',
+      borderColor: "white",
     },
     y: {
       type: "linear",
@@ -156,10 +173,10 @@ const options = {
         },
       },
       grid: {
-        display: false,  // Remove grid lines for the x-axis
+        display: false, // Remove grid lines for the x-axis
         drawOnChart: false,
       },
-      borderColor: 'white',
+      borderColor: "white",
     },
   },
   plugins: {
@@ -206,7 +223,14 @@ const FlipCardHeatmap = () => {
             backfaceVisibility: "hidden",
           }}
         >
-          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor={'bg-green-100'} textColor={'text-green-950'} hoverColor={'bg-green-400'} activeBorder={'border-green-900'}/>
+          <Button
+            onClick={handleFlip}
+            text={"Get AI Insights"}
+            bgColor="bg-blue-100"
+            textColor="text-blue-900"
+            hoverColor="bg-blue-300"
+            activeBorder="border-blue-900"
+          />
           <Typography variant="h4" component="p">
             User Activity Heatmap
           </Typography>
@@ -227,16 +251,20 @@ const FlipCardHeatmap = () => {
             position: "absolute",
             width: "100%",
             height: "fitContent",
-            minHeight:"300px",
+            minHeight: "300px",
             backfaceVisibility: "hidden",
             backgroundColor: "#fff",
-            transform: "rotateX(180deg)"
-            // display: "flex",
-            // alignItems: "center",
-            // justifyContent: "center", 
+            transform: "rotateX(180deg)",
           }}
         >
-          <Button onClick={handleFlip} text={'View Graph'} bgColor={'bg-green-100'} textColor={'text-green-950'} hoverColor={'bg-green-400'} activeBorder={'border-green-900'}/>
+          <Button
+            onClick={handleFlip}
+            text={"View Graph"}
+            bgColor="bg-blue-100"
+            textColor="text-blue-900"
+            hoverColor="bg-blue-300"
+            activeBorder="border-blue-900"
+          />
           <CardContent>
             <Typography
               variant="h6"
@@ -258,27 +286,30 @@ const FlipCardHeatmap = () => {
               }}
             >
               <div>
-                <ReactMarkdown>
-                  {`
-### Key Observations:
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  children={`
+**Key Observations**
 - **Peak Activity Days:** The darkest green blocks indicate high user activity, particularly on some Fridays and Saturdays. This highlights increased engagement towards the end of the week.
 - **Consistent Engagement:** Moderate activity is observed on weekdays (Monday to Thursday) throughout the year, represented by lighter shades of green.
 - **Seasonal Trends:** Higher engagement is noticeable during **March**, **May**, and **November**, which could align with key events, campaigns, or seasonal trends.
-        `}
-                </ReactMarkdown>
+- **Weekend Relaxation:** The lower weekend activity supports the idea that users might be spending more time on leisure activities, social interactions, or personal pursuits.
+            `}
+                />
               </div>
               <div>
-                <ReactMarkdown>
-                  {`
-1. **Engagement Patterns:**
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  children={`
+1. **Engagement Patterns**
    - **Weekends:** Fridays and Saturdays show the highest levels of user engagement.
 
-2. **Actionable Insights:**
+2. **Actionable Insights**
    - **Capitalize on Trends:** Schedule important updates, promotions, or events on Fridays and Saturdays to maximize engagement.
    - **Seasonal Opportunities:** Use the activity spikes in March, May, and November to launch campaigns or features.
    - **Boost Weekday Engagement:** Focus on interactive content or campaigns to increase activity during weekday lulls.
-        `}
-                </ReactMarkdown>
+            `}
+                />
               </div>
             </div>
           </CardContent>

@@ -4,7 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
@@ -91,16 +90,7 @@ function StatCard({
         ? theme.palette.grey[400]
         : theme.palette.grey[700],
   };
-
-  const labelColors = {
-    up: "success",
-    down: "error",
-    neutral: "default",
-  };
-
-  const color = labelColors[trend] || "default";
   const chartColor = trendColors[trend] || theme.palette.grey[400];
-  const trendValues = { up: "+25%", down: "-25%", neutral: "+5%" };
 
   return (
     <Card variant="outlined" sx={{ height: "100%", flexGrow: 1,display:'flex', justifyContent:"center",alignItems:"center"  }}>

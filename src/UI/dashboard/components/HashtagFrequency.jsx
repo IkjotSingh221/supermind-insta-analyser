@@ -9,9 +9,8 @@ import { useTheme } from "@mui/material/styles";
 import ReactMarkdown from "react-markdown";
 import Button from "./Button";
 
-// Chart settings
 const chartSetting = {
-  height: 280, // Chart height
+  height: 280, 
 };
 
 const HashtagFrequency = () => {
@@ -48,7 +47,6 @@ const HashtagFrequency = () => {
 
   return (
     <Box
-      onClick={handleFlip}
       sx={{
         perspective: "1000px",
         cursor: "pointer",
@@ -139,19 +137,15 @@ const HashtagFrequency = () => {
             </Typography>
             <ReactMarkdown>
               {`
-## Key Observations:
+**Key Observations**
 - **#mood** leads as the most frequently used hashtag, indicating its high relevance and popularity among users.
 - Hashtags like **#happiness**, **#goodvibes**, **#lifestruggles**, and **#positiveenergy** also show significant usage, highlighting diverse themes in user-generated content.
 
-### Sentiment Insights:
-- Positive hashtags such as **#happiness**, **#goodvibes**, **#positiveenergy**, and **#moment** reflect users’ inclination toward optimism and well-being.
-- At the same time, hashtags like **#lifestruggles** and **#badvibes** demonstrate that users also engage in sharing challenges and personal struggles.
-
-### Engagement Trends:
+**Engagement Trends**
 - The frequency distribution indicates balanced engagement across hashtags, with no extreme outliers except for the slight peak in **#mood**.
 - This balanced usage suggests that users are discussing a variety of topics, from emotions and positivity to life challenges.
 
-### Applications:
+**Applications**
 - **Content Strategy**: Utilize high-frequency hashtags like **#mood**, **#happiness**, and **#goodvibes** to enhance visibility and engagement.
 - **Audience Understanding**: The combination of positive and challenging hashtags showcases an audience interested in expressing a full range of experiences, from achievements to struggles.
               `}

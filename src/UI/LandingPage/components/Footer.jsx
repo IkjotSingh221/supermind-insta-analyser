@@ -72,7 +72,7 @@ function Footer() {
         </div>
 
         <div className="mt-16 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} SocialMetrics. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} TrendWiz. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { BarChart } from '@mui/x-charts/BarChart';
@@ -196,15 +195,14 @@ export default function FlipCardBarChart() {
           <ReactMarkdown>
             {`
 
-### Overview
-The bar graph compares average likes, shares, and comments for three post types: **Carousel**, **Reel**, and **Static**. The y-axis represents the total average engagement (likes, shares, and comments) for each post type, with values reaching up to 1,000.
+The bar graph compares average likes, shares, and comments for three post types: **Carousel**, **Reel**, and **Static**.
 
-### Insights
+**Insights:**
 1. **Reels perform the best** in terms of engagement, surpassing both Carousel and Static posts. They exhibit the highest overall contribution from likes, shares, and comments.
 2. **Carousel posts** follow closely, with slightly lower engagement than Reels but outperforming Static posts.
 3. **Static posts** have the lowest engagement, though they still generate consistent activity across all metrics.
 
-### Strategic Recommendations
+**Strategic Recommendations:**
 - Prioritize **Reels** for maximum audience interaction and engagement.
 - Use **Carousels** for balanced content that still drives notable engagement.
 - Leverage **Static posts** for specific purposes (e.g., announcements) but combine with other formats for better overall performance.

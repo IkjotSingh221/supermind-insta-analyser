@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { LineChart, PieChart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

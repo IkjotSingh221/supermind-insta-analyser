@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import WordCloud from 'react-wordcloud';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';

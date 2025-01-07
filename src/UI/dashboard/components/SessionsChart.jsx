@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { LineChart } from '@mui/x-charts/LineChart';
 import Box from '@mui/material/Box';
-import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import data from "../../../data/finalOutput.json";
 import ReactMarkdown from "react-markdown";
 import Button from "./Button";
@@ -37,7 +36,6 @@ function getMonthName(dateString) {
 
 export default function SessionsChart() {
   const [flipped, setFlipped] = useState(false);
-  const [filter, setFilter] = useState('monthly'); // Default filter is monthly
   const theme = useTheme();
 
   // Grouping data by month and calculating the totals for likes, comments, and shares
@@ -73,14 +71,6 @@ export default function SessionsChart() {
 
   const handleFlip = (event) => {
     setFlipped(!flipped);
-  };
-
-  const handleChangeFilter = (event) => {
-    setFilter(event.target.value); // Update the selected filter
-  };
-
-  const getBackCardText = () => {
-    return 'Flip back to see the chart for the monthly data';
   };
 
   return (
@@ -175,9 +165,6 @@ export default function SessionsChart() {
             backfaceVisibility: 'hidden',
             backgroundColor: '#fff',
             transform: 'rotateX(180deg)',
-            // display: 'flex',
-            // alignItems: 'center',
-            // justifyContent: 'center',
           }}
         >
           <Button onClick={handleFlip} text={'View Graph'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
@@ -196,29 +183,20 @@ export default function SessionsChart() {
           <ReactMarkdown>
             {`
 
-## Monthly Engagement Overview (January to November 2024)
+**Monthly Engagement Overview:**
 
-### Likes:
-- A significant **35% increase** in average likes per month.
+- **Likes:** A significant **35% increase** in average likes per month demonstrates a marked increase in user engagement.
+- **Comments & Shares:** While **Relatively stable** overall, a gradual upward trajectory in comments and shares, particularly in the latter half of the year, signals growing audience interaction and content virality.
 
-### Comments & Shares:
-- **Relatively stable**, with slight upward trends in the latter half of the year.
-
----
-
-### Possible Factors:
+**Possible Factors:**
 - Increased engagement with content
 - Improved content quality
 - Increased marketing efforts
 
----
-
-### Recommendations:
+**Recommendations:**
 - Maintain high-quality content creation
 - Experiment with marketing strategies
 - Monitor comments and shares for feedback
-
-
               `}
           </ReactMarkdown>
         </Card>
