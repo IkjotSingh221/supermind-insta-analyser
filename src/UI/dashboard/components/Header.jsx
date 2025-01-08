@@ -24,7 +24,7 @@ export default function Header() {
             alt="TrendWiz Logo"
             className="h-8 w-8 object-contain" // Ensures consistent dimensions
           />
-          <span className="text-xl font-bold text-gray-800">TrendWiz</span>
+          <span className="text-xl font-bold text-black-800">TrendWiz</span>
         </div>
       <NavbarBreadcrumbs />
       
