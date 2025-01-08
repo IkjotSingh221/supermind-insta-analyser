@@ -18,8 +18,17 @@ export default function Header() {
       }}
       spacing={2}
     >
+      <div className="flex items-center space-x-4">
+        <img
+            src="./logo512.png"
+            alt="TrendWiz Logo"
+            className="h-8 w-8 object-contain" // Ensures consistent dimensions
+          />
+          <span className="text-xl font-bold text-gray-800">TrendWiz</span>
+        </div>
       <NavbarBreadcrumbs />
-      <Stack direction="row" sx={{ gap: 1 }}>
+      
+           <Stack direction="row" sx={{ gap: 1 }}>
         <CustomDatePicker />
         <ColorModeIconDropdown />
       </Stack>

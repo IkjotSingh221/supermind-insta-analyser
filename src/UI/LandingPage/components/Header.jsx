@@ -1,7 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
+
   return (
+
     <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
@@ -19,6 +23,14 @@ function Header() {
           <a href="#footer " className="text-gray-600 hover:text-blue-600">Contact Us</a>
         </div>
 
+        {/* <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => navigate('/login')}
+            className="px-8 py-2  bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Login
+          </button>
+          </div> */}
         <div className="flex items-center space-x-4">
         </div>
       </nav>

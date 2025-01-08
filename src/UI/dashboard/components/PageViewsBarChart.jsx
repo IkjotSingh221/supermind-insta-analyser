@@ -98,9 +98,10 @@ export default function FlipCardBarChart() {
             position: 'absolute',
             width: '100%',
             backfaceVisibility: 'hidden',
+            height:'100%',
           }}
         >
-          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
+          <Button onClick={handleFlip} text={'Get AI Insights'} bgColor='bg-blue-100' textColor='text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900' />
           <CardContent>
             <Typography component="h2" variant="subtitle2" gutterBottom>
               Average Metrics by Post Type
@@ -170,31 +171,36 @@ export default function FlipCardBarChart() {
           sx={{
             position: 'absolute',
             width: '100%',
-            height: 'fitContent',
+            height: '100%', // Matches the front card's height
             backfaceVisibility: 'hidden',
             backgroundColor: '#fff',
-            transform: 'rotateX(180deg)'
-            // display: 'flex',
-            // alignItems: 'center',
-            // justifyContent: 'center',
+            transform: 'rotateX(180deg)',
+            overflowY:"scroll",
           }}
         >
-          <Button onClick={handleFlip} text={'View Graph'} bgColor = 'bg-blue-100' textColor = 'text-blue-900' hoverColor='bg-blue-300' activeBorder='border-blue-900'/>
-          <Typography
-            variant="h6"
-            align="center"
-            sx={{
-              fontWeight: "bold",
-              fontSize: "1.5rem", // Increased font size for the back message
-              color: "text.secondary",
-              marginBottom: 2,
-            }}
-          >
-            Insights for the Average Metrics
-          </Typography>
-          <ReactMarkdown>
-            {`
-
+          <Button
+            onClick={handleFlip}
+            text={'View Graph'}
+            bgColor='bg-blue-100'
+            textColor='text-blue-900'
+            hoverColor='bg-blue-300'
+            activeBorder='border-blue-900'
+          />
+          <CardContent sx={{ padding: 2 }}>
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "1.5rem", // Consistent font size
+                color: "text.secondary",
+                marginBottom: 2,
+              }}
+            >
+              Insights for the Average Metrics
+            </Typography>
+            <ReactMarkdown>
+              {`
 The bar graph compares average likes, shares, and comments for three post types: **Carousel**, **Reel**, and **Static**.
 
 **Insights:**
@@ -206,10 +212,11 @@ The bar graph compares average likes, shares, and comments for three post types:
 - Prioritize **Reels** for maximum audience interaction and engagement.
 - Use **Carousels** for balanced content that still drives notable engagement.
 - Leverage **Static posts** for specific purposes (e.g., announcements) but combine with other formats for better overall performance.
-
-              `}
-          </ReactMarkdown>
+      `}
+            </ReactMarkdown>
+          </CardContent>
         </Card>
+
       </Box>
     </Box>
   );
